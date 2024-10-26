@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+
+    <!-- Header bar with only the Logo -->
+    <header>
+        <div class="top-bar">
+            <div class="logo">🎉STUDYBUDDY ADHD🎉</div>
+        </div>
+    </header>
+    
+    <div class="login-container">
+        <h1>Sign in to your account</h1>
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p> <!-- Connected to the signup page -->
+        <form action="/summary.html" method="POST">
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" onclick="submitForm()">Sign in</button>
+        </form>
+    </div>
+
+    <div class="chat-button">
+        <button onclick="chhat()">Chat with Us</button>
+    </div>
+
+    <script src="./static/script1.js"></script>
+</body>
+</html>

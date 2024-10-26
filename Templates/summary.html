@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Transcript Summarizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            background-image:url("./static/back.jpg")
+        }
+        .container {
+            width: 500px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        input {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #6200ea;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #5300d8;
+        }
+        #summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>YouTube Transcript Summarizer</h1>
+    <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" />
+    <button onclick="summarize()">Summarize</button>
+
+    <div id="summary"></div>
+</div>
+
+<script>
+    function summarize() {
+        const youtubeUrl = document.getElementById('youtubeUrl').value;
+        
+        fetch('/summarize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ youtube_url: youtubeUrl }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.summary) {
+                document.getElementById('summary').textContent = data.summary;
+            } else if (data.error) {
+                document.getElementById('summary').textContent = data.error;
+            }
+        })
+        .catch(error => {
+            document.getElementById('summary').textContent = 'An error occurred while processing the request.';
+        });
+    }
+    
+</script>
+
+</body>
+</html>

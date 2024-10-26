@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            background-image:url("./static/back.jpg")
+        }
+        .chatbot-container {
+            width: 700px;
+             /* Added missing semicolon */
+            max-width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        
+        .chatbot-header {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            background-color: #6200ea;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+        .chatbox {
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            padding: 8px 12px;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+        .user-message {
+            align-self: flex-end;
+            background-color: #6200ea;
+            color: #fff;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background-color: #eee;
+        }
+        .input-container {
+            display: flex;
+            border-top: 1px solid #ddd;
+            padding: 10px;
+        }
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            margin-right: 5px;
+        }
+        .input-container button {
+            padding: 10px;
+            border: none;
+            background-color: #6200ea;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chatbot-container">
+    <div class="chatbot-header">
+        CHATBOT
+    </div>
+    <div class="chatbox" id="chatbox">
+        <div class="message bot-message">Hello! How can I assist you today?</div>
+    </div>
+    <div class="input-container">
+        <input type="text" id="userInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    async function sendMessage() {
+        const chatbox = document.getElementById("chatbox");
+        const userInput = document.getElementById("userInput");
+
+        if (userInput.value.trim() !== "") {
+            // Add user's message to the chatbox
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user-message");
+            userMessage.innerText = userInput.value;
+            chatbox.appendChild(userMessage);
+
+            // Save user's input for sending to the backend
+            const message = userInput.value;
+
+            // Clear input field
+            userInput.value = "";
+
+            // Send message to the backend
+            const response = await fetch('/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+
+            const data = await response.json();
+
+            // Add bot's response to the chatbox
+            const botMessage = document.createElement("div");
+            botMessage.classList.add("message", "bot-message");
+            botMessage.innerText = data.response;
+            chatbox.appendChild(botMessage);
+
+            // Scroll to the bottom of the chatbox
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+    }
+</script>
+
+</body>
+</html>
